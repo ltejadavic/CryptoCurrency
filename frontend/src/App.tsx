@@ -4,6 +4,8 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Home from './components/Home';
 import ProtectedRoute from './components/ProtectedRoute';
+import AgregarSaldo from './components/AgregarSaldo';
+import ListaCriptomonedas from './components/ListaCriptomonedas';
 
 const App: React.FC = () => {
   return (
@@ -13,6 +15,8 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path="/agregar-saldo" element={<ProtectedRoute><AgregarSaldo /></ProtectedRoute>} />
+        <Route path="/lista-criptomonedas" element={<ProtectedRoute><ListaCriptomonedas /></ProtectedRoute>} />
       </Routes>
     </Router>
   );
