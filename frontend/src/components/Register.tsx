@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './Register.css';
 
 const Register: React.FC = () => {
   const [nombre, setNombre] = useState('');
@@ -34,18 +35,40 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="auth-container">
+    <div className="container">  {/* Usar el container definido en CSS */}
       <h2>Registro</h2>
       <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} />
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <input 
+          type="text" 
+          placeholder="Nombre" 
+          value={nombre} 
+          onChange={(e) => setNombre(e.target.value)} 
+        />
+        <input 
+          type="email" 
+          placeholder="Email" 
+          value={email} 
+          onChange={(e) => setEmail(e.target.value)} 
+        />
+        <input 
+          type="password" 
+          placeholder="Password" 
+          value={password} 
+          onChange={(e) => setPassword(e.target.value)} 
+        />
         <button type="submit">Registrarse</button>
       </form>
-      <p style={{ color: mensaje.includes('error') ? 'red' : 'green' }}>{mensaje}</p>
-      <p>Ya tienes una cuenta? <span onClick={() => navigate('/login')} style={{ cursor: 'pointer', color: 'blue' }}>Inicia sesión aquí</span></p>
+      <p className={mensaje.includes('error') ? 'error-message' : 'success-message'}>
+        {mensaje}
+      </p>
+      <p>Ya tienes una cuenta? 
+        <span onClick={() => navigate('/login')} className="link">Inicia sesión aquí</span>
+      </p>
+    </div>
     </div>
   );
 };
+
 
 export default Register;

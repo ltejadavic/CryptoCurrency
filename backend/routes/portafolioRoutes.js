@@ -69,6 +69,41 @@ router.get('/lista', verificarToken, async (req, res) => {
     }
 });
 
+// Ruta para hacer cashout de una criptomoneda
+router.post('/cashout', verificarToken, async (req, res) => {
+    const { idPortafolio, cantidadCriptos, valorEnDolares } = req.body;
+
+    try {
+      // Obtener el usuario autenticado mediante el middleware verificarToken
+      const usuario = await User.findOne({ where: { id: req.usuario.id } });
+
+      if (!usuario) {
+        return res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+
+      // Obtener el portafolio por su ID
+      const portafolio = await Portafolio.findOne({ where: { id: idPortafolio, usuario_id: req.usuario.id } });
+
+      if (!portafolio) {
+        return res.status(404).json({ message: 'Portafolio no encontrado' });
+      }
+
+      // Sumar el valor en dólares al saldo actual
+      const nuevoSaldo = parseFloat(usuario.saldo) + parseFloat(valorEnDolares);
+      usuario.saldo = nuevoSaldo.toFixed(2);  // Asegurarse de que solo tenga dos decimales
+
+      await usuario.save();  // Guardar el nuevo saldo del usuario
+
+      // Eliminar el portafolio después del cashout
+      await portafolio.destroy();
+
+      res.json({ message: `Has hecho cashout de ${cantidadCriptos.toFixed(6)} ${portafolio.criptomoneda} por ${valorEnDolares.toFixed(2)} USD.` });
+    } catch (error) {
+      console.error('Error en cashout:', error);
+      res.status(500).json({ message: 'Error al realizar el cashout' });
+    }
+});
+
 // Función para obtener el precio actual de la criptomoneda desde la API Coinlayer
 async function obtenerPrecioCriptomoneda(criptomoneda) {
     try {

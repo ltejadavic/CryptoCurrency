@@ -6,6 +6,9 @@ import Home from './components/Home';
 import ProtectedRoute from './components/ProtectedRoute';
 import AgregarSaldo from './components/AgregarSaldo';
 import ListaCriptomonedas from './components/ListaCriptomonedas';
+import Cashout from './components/Cashout';
+import Graficas from './components/Graficas';
+import './App.css';
 
 const App: React.FC = () => {
   return (
@@ -17,6 +20,8 @@ const App: React.FC = () => {
         <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
         <Route path="/agregar-saldo" element={<ProtectedRoute><AgregarSaldo /></ProtectedRoute>} />
         <Route path="/lista-criptomonedas" element={<ProtectedRoute><ListaCriptomonedas /></ProtectedRoute>} />
+        <Route path="/cashout" element={<Cashout />} />
+        <Route path="/graficas" element={<ProtectedRoute><Graficas /></ProtectedRoute>} />
       </Routes>
     </Router>
   );

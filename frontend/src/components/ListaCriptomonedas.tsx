@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './ListaCriptomonedas.css';
 
 const ListaCriptomonedas: React.FC = () => {
   const [criptomonedas, setCriptomonedas] = useState<{ [key: string]: number }>({});
@@ -82,45 +83,28 @@ const ListaCriptomonedas: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="crypto-list-container">
       <h2>Lista de Criptomonedas</h2>
 
-      {/* Si no hay criptomoneda seleccionada, mostrar la lista completa */}
       {!criptoSeleccionada ? (
-        <ul>
+        <div className="crypto-table">
           {Object.keys(criptomonedas).map((simbolo) => (
-            <li key={simbolo}>
-              {simbolo}: ${criptomonedas[simbolo]}
-              <button onClick={() => setCriptoSeleccionada(simbolo)}>Seleccionar</button>
-            </li>
+            <div key={simbolo} className="crypto-row">
+              <div className="crypto-name">{simbolo}</div>
+              <div className="crypto-price">${criptomonedas[simbolo]}</div>
+              <button onClick={() => setCriptoSeleccionada(simbolo)} className="select-button">Seleccionar</button>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
         <div>
           <h3>Invertir en {criptoSeleccionada}</h3>
           <p>Saldo disponible: ${saldo}</p>
-          
-          {/* Slider para ajustar el monto */}
-          <input 
-            type="range" 
-            min="0" 
-            max={saldo} 
-            value={montoInvertido} 
-            onChange={(e) => setMontoInvertido(Number(e.target.value))} 
-          />
-          
-          {/* Campo para editar manualmente el monto */}
-          <input 
-            type="number" 
-            value={montoInvertido} 
-            onChange={(e) => setMontoInvertido(Number(e.target.value))} 
-            min="0" 
-            max={saldo} 
-          />
-          
-          <p>Monto a invertir: ${montoInvertido}</p>
+          <input type="range" min="0" max={saldo} value={montoInvertido} onChange={(e) => setMontoInvertido(Number(e.target.value))} />
+          <input type="number" value={montoInvertido} onChange={(e) => setMontoInvertido(Number(e.target.value))} min="0" max={saldo} />
+          <p>Monto a invertir: ${montoInvertido.toFixed(2)}</p>
           <button onClick={handleInvertir}>Invertir</button>
-          <button onClick={handleDeseleccionar}>Deseleccionar</button> {/* Botón para deseleccionar */}
+          <button onClick={handleDeseleccionar}>Deseleccionar</button>
         </div>
       )}
 

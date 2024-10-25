@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './Login.css';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -29,18 +30,32 @@ const Login: React.FC = () => {
       }
     };
 
-  return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <button type="submit">Login</button>
-      </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <p>No tienes cuenta? <span onClick={() => navigate('/register')} style={{ cursor: 'pointer', color: 'blue' }}>Regístrate aquí</span></p>
-    </div>
-  );
-};
+    return (
+      <div className="auth-container">
+      <div className="container">  {/* Usar el container definido en CSS */}
+        <h2>Login</h2>
+        <form onSubmit={handleSubmit}>
+          <input 
+            type="email" 
+            placeholder="Email" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+          />
+          <input 
+            type="password" 
+            placeholder="Password" 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+          />
+          <button type="submit">Login</button>
+        </form>
+        {error && <p className="error-message">{error}</p>}  {/* Clase para el mensaje de error */}
+        <p>No tienes cuenta? 
+          <span onClick={() => navigate('/register')} className="link">Regístrate aquí</span>
+        </p>
+      </div>
+      </div>
+    );
+  };
 
 export default Login;

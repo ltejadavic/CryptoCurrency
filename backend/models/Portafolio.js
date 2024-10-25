@@ -16,11 +16,11 @@ const Portafolio = sequelize.define('Portafolio', {
         allowNull: false
     },
     cantidad_invertida: {
-        type: DataTypes.DECIMAL(10, 2),
+        type: DataTypes.DECIMAL(18, 12),
         allowNull: false
     },
     precio_compra: {
-        type: DataTypes.DECIMAL(10, 2),
+        type: DataTypes.DECIMAL(18, 12),
         allowNull: false
     },
     fecha_inversion: {

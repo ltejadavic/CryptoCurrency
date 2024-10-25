@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './Home.css';
 
 // Define la interfaz para los portafolios
 interface Portafolio {
@@ -73,15 +74,16 @@ const Home: React.FC = () => {
   };
 
   return (
+    <div className="home-container">
     <div>
-      <h2>Bienvenido a la Home</h2>
+      <h2 className="welcome-message">Panel Principal</h2>
       {user ? (
         <>
-          <p>Bienvenido, {user.nombre}!</p>
-          <p>Tu saldo actual es: ${user.saldo}</p>
+          <h3 className="welcome-name">Bienvenido, {user.nombre}!</h3>
+          <h3 className="important-info">Tu saldo actual es: ${user.saldo}</h3>
 
           {/* Mostrar el valor total en USD y el porcentaje de ganancia o pérdida */}
-          <h3>
+          <h3 className="important-info">
             Valor total de tus inversiones en USD: ${valorTotalUSD.toFixed(2)} 
             ({porcentajeTotal.toFixed(2)}%)
           </h3>
@@ -89,38 +91,47 @@ const Home: React.FC = () => {
           {/* Botones */}
           <button onClick={() => navigate('/agregar-saldo')}>Agregar Saldo</button>
           <button onClick={() => navigate('/lista-criptomonedas')}>Ver Criptomonedas</button>
+          <button onClick={() => navigate('/cashout')}>Ir a Cashout</button>{/* Botón para ir a Cashout */}
+          <button onClick={() => navigate('/graficas')}>Ir a Gráficas</button>
 
           {/* Listar los portafolios del usuario */}
-          <h3>Mis Inversiones:</h3>
-          <ul>
+          <div className="investment-section">
+            <h3>Mis Inversiones:</h3>
             {portafolios.map((portafolio) => {
               const preciosCriptos = localStorage.getItem('preciosCriptos');
               const preciosActuales = preciosCriptos ? JSON.parse(preciosCriptos) : {};
               const precioActual = preciosActuales[portafolio.criptomoneda];
-              const cantidadCriptos = Number(portafolio.cantidad_invertida) / Number(portafolio.precio_compra); // Convertir a número
-              
-              // Calcular el porcentaje de ganancia/pérdida para cada portafolio
+              const cantidadCriptos = Number(portafolio.cantidad_invertida) / Number(portafolio.precio_compra);
               const porcentajeGanancia = ((Number(precioActual) - Number(portafolio.precio_compra)) / Number(portafolio.precio_compra)) * 100;
+              const progressBarWidth = Math.abs(porcentajeGanancia);
               
               return (
-                <li key={portafolio.id}>
-                  {portafolio.criptomoneda}: {cantidadCriptos.toFixed(6)} unidades
-                  <br />
-                  Invertido: ${Number(portafolio.cantidad_invertida).toFixed(2)} a un precio de compra de ${Number(portafolio.precio_compra).toFixed(2)}
-                  <br />
-                  Valor actual: ${precioActual ? (cantidadCriptos * Number(precioActual)).toFixed(2) : 'Desconocido'}
-                  <br />
-                  Ganancia/Pérdida: {porcentajeGanancia.toFixed(2)}%
-                </li>
+                <div key={portafolio.id} className="investment-card">
+                  <div className="investment-details">
+                    <strong>{portafolio.criptomoneda}:</strong> {cantidadCriptos.toFixed(6)} unidades
+                    <br />
+                    Invertido: ${Number(portafolio.cantidad_invertida).toFixed(2)} a un precio de compra de ${Number(portafolio.precio_compra).toFixed(2)}
+                    <br />
+                    Valor actual: ${precioActual ? (cantidadCriptos * Number(precioActual)).toFixed(2) : 'Desconocido'}
+                    <br />
+                    <span className={porcentajeGanancia < 0 ? "negative" : ""}>
+                      Ganancia/Pérdida: {porcentajeGanancia.toFixed(2)}%
+                      <div className="progress-bar">
+                        <div className="progress-bar-inner" style={{ width: `${progressBarWidth}%` }}></div>
+                      </div>
+                    </span>
+                  </div>
+                </div>
               );
             })}
-          </ul>
+          </div>
 
           <button onClick={handleLogout}>Cerrar sesión</button>
         </>
       ) : (
         <p>Cargando...</p>
       )}
+    </div>
     </div>
   );
 };
